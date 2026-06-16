@@ -41,8 +41,10 @@ The RAG pipeline, each step a clearly separated function in `notion_kb_chatbot.p
 
 **Models used:** embeddings `text-embedding-3-small`, generation `gpt-4o-mini`.
 
-> 📊 See [SYSTEM_ARCHITECTURE.md](SYSTEM_ARCHITECTURE.md) for flowchart diagrams
-> of the indexing pipeline, query flow, caching, and the full request lifecycle.
+> 📊 See [SYSTEM_ARCHITECTURE.md](SYSTEM_ARCHITECTURE.md) for the structural
+> view (components, pipeline, caching, request lifecycle), and
+> [SYSTEM_FLOW.md](SYSTEM_FLOW.md) for the runtime flow (end-to-end steps and
+> data transformations).
 
 ---
 
