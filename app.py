@@ -37,10 +37,22 @@ st.set_page_config(page_title="Notion KB Chatbot", page_icon="📚", layout="cen
 # (set in the app's dashboard). Copy any we find into os.environ so the core
 # module, which reads os.environ, works identically in both places. Env vars
 # that are already set win, so local .env still takes precedence.
+#
+# NOTE: touching st.secrets raises FileNotFoundError when no secrets.toml
+# exists (the normal local case), so we read it through a guarded helper.
 # ---------------------------------------------------------------------------
+def _secret(key, default=None):
+    try:
+        return st.secrets.get(key, default)
+    except FileNotFoundError:
+        return default
+
+
 for _key in ("OPENAI_API_KEY", "NOTION_API_KEY", "NOTION_TOKEN"):
-    if not os.environ.get(_key) and _key in st.secrets:
-        os.environ[_key] = st.secrets[_key]
+    if not os.environ.get(_key):
+        _val = _secret(_key)
+        if _val:
+            os.environ[_key] = _val
 
 
 # ---------------------------------------------------------------------------
@@ -50,7 +62,7 @@ for _key in ("OPENAI_API_KEY", "NOTION_API_KEY", "NOTION_TOKEN"):
 # no password is configured, the gate is skipped (handy for purely local use).
 # ---------------------------------------------------------------------------
 def _check_password():
-    expected = os.environ.get("APP_PASSWORD") or st.secrets.get("APP_PASSWORD", "")
+    expected = os.environ.get("APP_PASSWORD") or _secret("APP_PASSWORD", "")
     if not expected:
         return True  # no password configured -> open (local dev convenience)
     if st.session_state.get("authenticated"):
