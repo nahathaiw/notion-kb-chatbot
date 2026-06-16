@@ -167,6 +167,13 @@ with st.sidebar:
         "Chunks to retrieve (top-k)", min_value=1, max_value=8, value=rag.TOP_K,
         help="How many document chunks to feed the model as context per question.",
     )
+    min_score = st.slider(
+        "Relevance threshold", min_value=0.0, max_value=0.5, value=rag.MIN_SIMILARITY,
+        step=0.05,
+        help="Chunks below this similarity are discarded. If nothing clears the "
+             "bar, the bot honestly says it doesn't have the info. Raise it to be "
+             "stricter, lower it if good answers are being rejected.",
+    )
     st.caption(f"Embedding model: `{rag.EMBED_MODEL}`")
     st.caption(f"Chat model: `{rag.CHAT_MODEL}`")
 
@@ -220,20 +227,28 @@ if query:
 
     with st.chat_message("assistant"):
         with st.spinner("Retrieving and answering…"):
-            retrieved = store.retrieve(query, top_k=top_k)
-            # Pass prior turns (content only) so follow-ups have conversational
-            # context. We exclude the just-added user turn — generate_answer
-            # appends the current question itself.
+            # Prior turns (content only). We exclude the just-added user turn —
+            # generate_answer appends the current question itself.
             history = [
                 {"role": m["role"], "content": m["content"]}
                 for m in st.session_state.messages[:-1]
             ]
+            # Rewrite follow-ups into a standalone query so retrieval has the full
+            # context, then retrieve with the relevance threshold applied.
+            search_query = rag.rewrite_query(query, history)
+            retrieved = store.retrieve(search_query, top_k=top_k, min_score=min_score)
             answer = rag.generate_answer(query, retrieved, history=history)
         st.markdown(answer)
+        # If the question was rewritten for retrieval, show what we searched for.
+        if search_query.strip().lower() != query.strip().lower():
+            st.caption(f"🔎 searched for: *{search_query}*")
         with st.expander("🔍 Retrieved chunks"):
-            for c in retrieved:
-                st.markdown(f"**`{c['source']}`** · similarity `{c['score']:.3f}`")
-                st.text(c["text"])
+            if retrieved:
+                for c in retrieved:
+                    st.markdown(f"**`{c['source']}`** · similarity `{c['score']:.3f}`")
+                    st.text(c["text"])
+            else:
+                st.caption("No chunks cleared the relevance threshold.")
 
     st.session_state.messages.append(
         {"role": "assistant", "content": answer, "retrieved": retrieved}

@@ -37,6 +37,7 @@ CHAT_MODEL = "gpt-4o-mini"              # cheap, fast generation model
 CHUNK_SIZE = 800                        # characters per chunk (see chunk_text)
 CHUNK_OVERLAP = 150                     # characters shared between neighbours
 TOP_K = 4                               # how many chunks to retrieve per question
+MIN_SIMILARITY = 0.20                   # chunks scoring below this are treated as irrelevant
 
 # The OpenAI client reads OPENAI_API_KEY from the environment automatically.
 # We construct it once and reuse it everywhere.
@@ -176,7 +177,7 @@ class VectorStore:
         self.chunks = chunk_records   # parallel list: metadata for each vector
         self.vectors = vectors        # (num_chunks, dim) normalized matrix
 
-    def retrieve(self, query, top_k=TOP_K):
+    def retrieve(self, query, top_k=TOP_K, min_score=MIN_SIMILARITY):
         """Find the `top_k` chunks most similar to `query`.
 
         Steps:
@@ -184,7 +185,15 @@ class VectorStore:
              question and chunks live in the same vector space and are comparable.
           2. Score every chunk by cosine similarity. Because all vectors are
              normalized, that is just a dot product: matrix @ query_vector.
-          3. Return the highest-scoring chunks along with their scores.
+          3. Keep the highest-scoring chunks, but DROP any whose similarity is
+             below `min_score`.
+
+        WHY THE THRESHOLD: without it, retrieval always hands back the top_k
+        chunks even for a question the docs don't cover — and the model, given
+        *some* context, tends to stretch it into a confident-sounding but
+        ungrounded answer. By discarding weak matches we let retrieval return
+        *nothing* when nothing is relevant, which is the signal generate_answer
+        uses to honestly say "I don't have that information."
         """
         query_vector = embed_texts([query])[0]            # shape: (dim,)
 
@@ -197,12 +206,57 @@ class VectorStore:
 
         results = []
         for idx in top_indices:
+            score = float(scores[idx])
+            if score < min_score:
+                continue                  # too weak to be trusted as relevant
             results.append({
                 "source": self.chunks[idx]["source"],
                 "text": self.chunks[idx]["text"],
-                "score": float(scores[idx]),
+                "score": score,
             })
         return results
+
+
+# ---------------------------------------------------------------------------
+# 5.5 QUERY REWRITING (for multi-turn chat)
+# ---------------------------------------------------------------------------
+def rewrite_query(query, history=None):
+    """Turn a context-dependent follow-up into a standalone search query.
+
+    THE PROBLEM: in a chat, people ask follow-ups like "what about sharing it?"
+    Generation can resolve that from the conversation, but RETRIEVAL embeds the
+    raw question — and "what about sharing it?" has almost no overlap with the
+    right chunks, so it pulls the wrong context. The answer then degrades even
+    though the model "understood" the question.
+
+    THE FIX: before retrieving, ask the model to rewrite the latest question into
+    a self-contained one using the conversation so far (e.g. "How do I share a
+    Notion page to the web?"). We embed THAT for retrieval, while still answering
+    the user's original phrasing. With no history there's nothing to resolve, so
+    we skip the call and return the query unchanged.
+    """
+    if not history:
+        return query
+
+    conversation = "\n".join(f"{m['role']}: {m['content']}" for m in history)
+    system_prompt = (
+        "You rewrite a user's latest message into a standalone search query for a "
+        "document search engine. Use the conversation to resolve pronouns and "
+        "implicit references. Output ONLY the rewritten query, nothing else. If "
+        "the message is already self-contained, return it unchanged."
+    )
+    user_prompt = f"Conversation so far:\n{conversation}\n\nLatest message: {query}\n\nStandalone query:"
+
+    response = client.chat.completions.create(
+        model=CHAT_MODEL,
+        temperature=0,
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ],
+    )
+    rewritten = response.choices[0].message.content.strip()
+    return rewritten or query
 
 
 # ---------------------------------------------------------------------------
@@ -230,6 +284,13 @@ def generate_answer(query, retrieved_chunks, history=None):
     LOW TEMPERATURE: temperature controls randomness. For factual Q&A we want
     consistent, faithful answers, not creativity, so we set it near 0.
     """
+    # If retrieval found nothing relevant (everything fell below the similarity
+    # threshold), don't even call the model — there is no grounding to answer
+    # from, so we answer honestly and save an API round-trip.
+    if not retrieved_chunks:
+        return ("I don't have that information in my knowledge base. "
+                "Try rephrasing, or add a document that covers it.")
+
     # Stitch the retrieved chunks into a single context block, each labelled with
     # its source so the model can cite it accurately.
     context = "\n\n".join(
