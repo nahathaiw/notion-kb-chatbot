@@ -44,7 +44,8 @@ The RAG pipeline, each step a clearly separated function in `notion_kb_chatbot.p
 > 📊 See [SYSTEM_ARCHITECTURE.md](SYSTEM_ARCHITECTURE.md) for the structural
 > view (components, pipeline, caching, request lifecycle), and
 > [SYSTEM_FLOW.md](SYSTEM_FLOW.md) for the runtime flow (end-to-end steps and
-> data transformations).
+> data transformations), and [RAG_FLOW_N8N.md](RAG_FLOW_N8N.md) for an
+> n8n-style node-graph view (ingestion + chat workflows).
 
 ---
 
