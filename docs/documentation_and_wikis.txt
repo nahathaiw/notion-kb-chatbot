@@ -1,0 +1,50 @@
+Using Notion for Documentation and Wikis
+Source: https://www.notion.com/help/guides/category/documentation
+
+Notion is widely used to build a company's documentation system: a single place
+where teams capture and organize their knowledge. Creating a system for both
+capturing AND organizing documentation helps a team operate more efficiently —
+it compounds learning over time, saves people from repeating work, and gives
+everyone a shared source of truth.
+
+Building a knowledge base or wiki
+The goal of a wiki is to turn scattered information into an organized, accessible
+hub. Common building blocks:
+- A central "company home" page that acts as the front door to everything.
+- Databases for structured collections, such as client lists, projects, or
+  policies, so information is filterable and reusable rather than buried in prose.
+- Links that connect team knowledge to daily work, so docs are discoverable in
+  context instead of forgotten.
+
+Verified pages
+Page verification lets an owner mark a page as up to date and trustworthy. A
+verified badge helps readers know the information is current and can be relied on
+for decisions, and verification can be set to expire so pages get re-checked
+periodically. This keeps a growing knowledge base from filling up with stale docs.
+
+Database properties for organization
+Customizable properties add context to the pages inside a database, which makes
+the information immediately actionable. Properties let you filter, sort, group,
+and categorize documents so people can retrieve exactly what they need instead of
+scrolling through everything.
+
+Documentation systems for specific teams
+Different teams document different things, and Notion guides cover targeted
+approaches for each:
+- Product teams: templates for product requirement documents (PRDs), technical
+  specs, and cross-functional collaboration.
+- Engineering teams: note-taking systems that emphasize transparency and
+  building collective knowledge.
+- Design teams: documentation that connects design decisions to the context and
+  reasoning behind them.
+- Marketing teams: campaign management and project-organization strategies.
+
+AI-assisted documentation
+Notion AI can help write more efficiently, transform or summarize existing text,
+automate repetitive tasks, and generate new content directly inside the
+workspace, so documentation is faster to produce and easier to maintain.
+
+Integrations and accessibility
+Documentation is more useful when it reaches people where they already work.
+Notion supports Slack integration for gathering and sharing information, and link
+previews that make shared links render as rich, readable cards across the team.

@@ -1,0 +1,48 @@
+Notion API and Developer Integrations — Overview
+Source: https://developers.notion.com/guides/get-started/overview
+
+The Notion API is a REST-based interface that lets external applications interact
+with a Notion workspace. With it, developers can read, create, and update nearly
+everything in a workspace — pages, databases, users, comments, and more.
+
+Connection (integration) types
+Notion offers three authentication models, each suited to a different use case:
+- Internal connections: single-workspace integrations that use a static API
+  token. They are meant for team-owned automation such as data syncing,
+  notifications, and internal dashboards. Access is granted by the connection's
+  owner or by workspace members sharing pages with it.
+- Public connections: use OAuth 2.0 and are built for broader distribution to
+  many workspaces. The developer specifies the installation scope (any workspace
+  or selected ones), and users grant access by selecting specific pages during
+  the OAuth authorization flow. Public connections require a security review
+  before they can be listed in Notion's Marketplace.
+- Personal Access Tokens (PATs): user-scoped static tokens for individual
+  scripts, CLI tools, and personal automation. A PAT operates under the token
+  creator's own Notion permissions, so it does not require explicitly sharing
+  pages with an integration.
+
+Capabilities and access model
+Every connection operates with a defined set of capabilities that control what it
+is allowed to do — reading content, updating content, inserting content, managing
+comments, and so on. How a connection gains access to content depends on its
+type: internal connections rely on direct grants or workspace sharing, public
+connections use page selection during OAuth, and PATs inherit whatever the
+creator can already see.
+
+Sharing pages with an integration
+For internal connections, the API can only access pages and databases that have
+been explicitly shared with the integration. You share a page by opening it,
+going to its Connections menu, and adding the integration. This is the most
+common first-time stumbling block: if the API returns no results, it usually
+means no pages have been shared yet.
+
+Core API objects
+The API exposes the main building blocks of a workspace: pages, databases (and
+their views), blocks (the content inside pages), users, comments, file uploads,
+and workspace-wide search.
+
+Getting started
+Notion recommends beginning with an internal connection, because it gives you an
+API token immediately and lets you focus on building against a single workspace.
+Public connections and Marketplace listing are concerns to defer until later,
+once the integration is working.

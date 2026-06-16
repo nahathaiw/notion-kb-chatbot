@@ -7,27 +7,107 @@ Databases are how you track tasks, projects, contacts, or anything with structur
 Creating a database
 Type "/database" on a page and choose either an inline database (embedded in the
 current page) or a full-page database. Each entry, or row, is a page. Each column
-is a "property".
+is a "property". You can convert an inline database to full-page (and back) from
+the "..." menu, and turn any database into a different default view at any time.
 
 Property types
-Properties define what kind of data a column holds. Common types include Text,
-Number, Select (a single tag from a list), Multi-select (several tags), Date,
-Person, Checkbox, and Status. Choosing the right property type matters because it
-controls how you can filter, sort, and group your data later.
+Properties define what kind of data a column holds. Choosing the right property
+type matters because it controls how you can filter, sort, group, and summarize
+your data later.
+- Text: free-form notes or descriptions.
+- Number: numeric values, with optional formatting (plain, percent, currency)
+  and bar/ring progress display.
+- Select: a single tag chosen from a list of options.
+- Multi-select: several tags from a list.
+- Status: like Select but grouped into To-do / In progress / Complete stages.
+- Date: a single date, a date range, or a date with a reminder.
+- Person: one or more workspace members.
+- Files & media: attachments and images.
+- Checkbox: a true/false toggle.
+- URL, Email, Phone: clickable contact/link fields.
+- Formula: a computed value derived from other properties (see Formulas below).
+- Relation and Rollup: links between databases and summaries of linked data.
+- Created time, Created by, Last edited time, Last edited by: automatic metadata.
+- Button: runs one or more actions when clicked (see Buttons below).
 
 Views
 The same database can be displayed in many "views" without duplicating the data.
-A Table view looks like a spreadsheet, a Board view groups entries into Kanban-style
-columns, a Calendar view places entries on dates, and a Gallery view shows entries
-as cards. You can create multiple views of one database and switch between them.
+- Table: a spreadsheet-style grid.
+- Board: Kanban columns, grouped by a Select or Status property.
+- Calendar: entries placed on a monthly (or weekly) calendar by a Date property.
+- Gallery: entries shown as cards, good for images and visual content.
+- List: a clean, minimal stacked layout.
+- Timeline: a Gantt-style horizontal view for scheduling work over time.
+- Chart: visualize the data as a vertical or horizontal bar chart, line chart,
+  donut chart, or number chart. Charts can display up to 200 groups and 50
+  subgroups at a time.
+You can create multiple views of one database and switch between them; each view
+keeps its own filters, sorts, grouping, and visible properties.
 
-Filtering and sorting
-Use filters to show only the entries that match a condition, for example "Status is
-Done" or "Date is this week". Use sorting to order entries, for example by due date
-or priority. Filters and sorts are saved per view, so each view can present the same
-data differently.
+Filtering, sorting, and grouping
+Use filters to show only the entries that match a condition, for example
+"Status is Done" or "Date is this week". Combine multiple conditions with AND/OR
+in advanced filters. Use sorting to order entries, for example by due date or
+priority. Use grouping to bucket entries under headings (e.g. group a board by
+Status, or a table by Assignee). Filters, sorts, and grouping are saved per view,
+so each view can present the same data differently. Conditional coloring can
+color rows based on a property's value, including formulas, relations, and
+rollups.
 
 Relations and rollups
-A Relation property links entries in one database to entries in another, for example
-linking Tasks to Projects. A Rollup then pulls in and summarizes data from those
-linked entries, such as counting how many tasks belong to each project.
+A Relation property links entries in one database to entries in another, for
+example linking Tasks to Projects. Relations can be one-way or two-way (a change
+on one side reflects on the other). A Rollup then pulls in and summarizes data
+from those linked entries — for example counting how many tasks belong to each
+project, summing their estimated hours, or showing the latest due date.
+
+Formulas
+A Formula property computes a value from other properties using functions and
+operators — for example concatenating text, doing arithmetic, comparing dates,
+or returning different results with if() conditions. Formulas can reference other
+properties (including rollups) and update automatically as the underlying data
+changes. Notion AI can help write and explain formulas.
+
+Sub-items and dependencies
+Sub-items let you nest entries under a parent entry (e.g. sub-tasks under a task),
+creating an expandable hierarchy inside one database. Dependencies mark that one
+entry must finish before another can start, which is especially useful in
+Timeline view for project scheduling. Filtering can include or exclude sub-items.
+
+Templates inside a database
+A database template is a pre-filled page layout you can reuse for new entries —
+for example a "Meeting notes" template with headings and default properties
+already set. Creating a new entry from a template saves repetitive setup. You can
+set a default template that applies automatically to new entries.
+
+Linked databases
+A linked database is a view of an existing database placed somewhere else (type
+"/linked" to create one). It shows the same underlying data with its own filters
+and sorts, so you can surface a focused slice of a source database on another
+page without copying the data.
+
+Buttons
+A Button property (or a standalone button block) runs one or more actions when
+clicked — such as adding a new entry, editing several properties at once,
+opening a page, or showing a confirmation. Buttons can use mentions and formulas
+in their actions, letting one click perform a multi-step routine.
+
+Database automations
+An automation is a trigger plus a sequence of actions that runs automatically
+when something changes. For example, "when Status changes to Done, set the
+Completed date to today", or "when a parent task is marked complete, mark all its
+sub-tasks complete". Automations can update properties, add or edit pages in
+another database, and send notifications (including to Slack). They remove manual
+busywork from recurring workflows.
+
+Importing and exporting
+You can create a database by importing a CSV file, and you can export a database
+to CSV or Markdown. This makes it easy to migrate data in from a spreadsheet or
+out to another tool.
+
+Sharing a database
+Because every database lives on a page, it follows Notion's normal sharing and
+permission model: you can share the database page with specific people, a group,
+the whole workspace, or publish it to the web. Permission levels (such as
+full access, edit, comment, and view) control what each person can do with the
+data.
