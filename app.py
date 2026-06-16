@@ -41,10 +41,22 @@ st.set_page_config(page_title="Notion KB Chatbot", page_icon="📚", layout="cen
 # NOTE: touching st.secrets raises FileNotFoundError when no secrets.toml
 # exists (the normal local case), so we read it through a guarded helper.
 # ---------------------------------------------------------------------------
+_SECRETS_FILES = (
+    os.path.expanduser("~/.streamlit/secrets.toml"),
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), ".streamlit", "secrets.toml"),
+)
+
+
 def _secret(key, default=None):
+    # Only read st.secrets if a secrets.toml actually exists. Merely *accessing*
+    # st.secrets when no file is present makes Streamlit emit a "No secrets found"
+    # message — so we check the filesystem first and skip it entirely on a plain
+    # local run (where keys come from .env instead).
+    if not any(os.path.exists(p) for p in _SECRETS_FILES):
+        return default
     try:
         return st.secrets.get(key, default)
-    except FileNotFoundError:
+    except Exception:
         return default
 
 
