@@ -1,0 +1,35 @@
+Sharing and Permissions in Notion
+
+Notion lets you share individual pages or your whole workspace with other people,
+with fine-grained control over what each person is allowed to do.
+
+Sharing a page
+Open a page and click "Share" in the top-right corner. You can invite people by
+email, or create a link to share. Permissions you grant on a page are inherited by
+all of its sub-pages, so sharing a top-level page shares everything beneath it.
+
+Permission levels
+There are four access levels, from most to least powerful:
+- Full access: can edit content and also share the page with others.
+- Can edit: can edit content but cannot change sharing settings.
+- Can comment: can read and leave comments, but cannot edit the content.
+- Can view: can only read the page.
+Grant the lowest level that still lets a person do their job; this is the principle
+of least privilege.
+
+Sharing to the web
+Toggle "Share to web" to publish a page as a public website that anyone with the
+link can view, no Notion account required. You can optionally allow public search
+engine indexing, or allow visitors to duplicate the page into their own workspace.
+Turn this off for anything confidential.
+
+Teamspaces
+In a Notion workspace, a teamspace groups pages and members for a department or
+project. Members of a teamspace share access to its pages by default. A workspace
+owner can set a teamspace to open (any member can join) or closed (membership is
+managed by admins).
+
+Guests vs members
+A member belongs to your workspace and may have broad access. A guest is invited to
+specific pages only and cannot see the rest of the workspace. Use guests for
+external collaborators such as clients or contractors.

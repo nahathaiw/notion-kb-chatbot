@@ -1,0 +1,28 @@
+Getting Started with Notion
+
+Notion is an all-in-one workspace where you can write, plan, and organize. Your
+content is built from pages. A page can hold text, images, to-do lists, tables,
+and even other pages nested inside it, so a single workspace can grow from a
+personal notes page into a full company wiki.
+
+Creating a page
+To create a new page, click the "+ New page" button in the left sidebar, or press
+Ctrl/Cmd + N. Give the page a title at the top, then start typing in the body
+below. Pages are saved automatically as you type, so there is no save button.
+
+Blocks
+Everything inside a page is a "block": a paragraph, a heading, an image, a bulleted
+list item. Type "/" anywhere on a page to open the block menu, then pick a block
+type such as Heading, To-do, Quote, or Code. You can drag blocks by the handle on
+their left to reorder them.
+
+Organizing pages
+Pages can be nested to any depth. Drag a page onto another page in the sidebar to
+make it a sub-page. Use the toggle arrows in the sidebar to expand or collapse a
+page's children. Favorite a page by clicking the star icon so it appears at the
+top of your sidebar for quick access.
+
+Search
+Press Ctrl/Cmd + P to open Quick Find and search across every page you can access.
+Search matches page titles and the text inside pages, so you can jump to anything
+in a couple of keystrokes.

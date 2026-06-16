@@ -1,0 +1,12 @@
+# Secrets — never commit real keys
+.env
+.streamlit/secrets.toml
+
+# Local editor/agent settings
+.claude/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/

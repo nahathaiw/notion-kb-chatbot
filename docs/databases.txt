@@ -1,0 +1,33 @@
+Working with Databases in Notion
+
+A Notion database is a collection of pages that share the same set of properties.
+Think of it like a spreadsheet where every row is actually a full page you can open.
+Databases are how you track tasks, projects, contacts, or anything with structure.
+
+Creating a database
+Type "/database" on a page and choose either an inline database (embedded in the
+current page) or a full-page database. Each entry, or row, is a page. Each column
+is a "property".
+
+Property types
+Properties define what kind of data a column holds. Common types include Text,
+Number, Select (a single tag from a list), Multi-select (several tags), Date,
+Person, Checkbox, and Status. Choosing the right property type matters because it
+controls how you can filter, sort, and group your data later.
+
+Views
+The same database can be displayed in many "views" without duplicating the data.
+A Table view looks like a spreadsheet, a Board view groups entries into Kanban-style
+columns, a Calendar view places entries on dates, and a Gallery view shows entries
+as cards. You can create multiple views of one database and switch between them.
+
+Filtering and sorting
+Use filters to show only the entries that match a condition, for example "Status is
+Done" or "Date is this week". Use sorting to order entries, for example by due date
+or priority. Filters and sorts are saved per view, so each view can present the same
+data differently.
+
+Relations and rollups
+A Relation property links entries in one database to entries in another, for example
+linking Tasks to Projects. A Rollup then pulls in and summarizes data from those
+linked entries, such as counting how many tasks belong to each project.
