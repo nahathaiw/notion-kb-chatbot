@@ -56,11 +56,15 @@ cp .env.example .env
 #    -> open .env and paste your real OpenAI key (Notion key is optional)
 
 # 3. Run the web app
-streamlit run app.py
+./run.sh
 ```
 
-The app opens at **http://localhost:8501**. Switch the **Knowledge source** in
+The app serves at **http://localhost:8502**. Switch the **Knowledge source** in
 the sidebar, type a question, and read the answer with its cited sources.
+
+> `run.sh` frees only this project's port (8502) before starting, so it never
+> disturbs other local Streamlit apps. The port is pinned in
+> `.streamlit/config.toml`, so a plain `streamlit run app.py` uses 8502 too.
 
 ### Configuration (`.env`)
 
@@ -79,7 +83,7 @@ APP_PASSWORD=change-me       # optional — gates the app (required before hosti
 **Web app (recommended):**
 
 ```bash
-streamlit run app.py
+./run.sh                 # serves on http://localhost:8502
 ```
 
 **Command-line loop** (the original minimal demo):

@@ -1,0 +1,11 @@
+# Pin this project to its own port so it never collides with other local
+# Streamlit apps (e.g. the STOCK project, which uses the default 8501).
+# Now `streamlit run app.py` always serves on 8502 for this project.
+[server]
+port = 8502
+# headless avoids the first-run "enter your email" prompt that otherwise blocks
+# a scripted/background launch. Open the printed URL yourself.
+headless = true
+
+[browser]
+gatherUsageStats = false
